@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\HandleJsonValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TagRequest extends FormRequest
 {
+    use HandleJsonValidation;
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -14,7 +17,7 @@ class TagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:tags,name,' . $this->id,
+            'name' => 'required|string|max:255|unique:tags,name,' . $this->route('tag'),
         ];
     }
 }
