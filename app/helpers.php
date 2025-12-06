@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 if (! function_exists('responseJson')) {
 
-    function responseJson(bool $success = true, ?string $message = null, ?array $data = null, ?array $errors = null, int $code = 200)
+    function responseJson(bool $success = true, ?string $message = null, mixed $data = null, mixed $errors = null, int $code = 200)
     {
         $specs = [
             'success' => $success,
