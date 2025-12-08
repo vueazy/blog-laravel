@@ -4,9 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RolePermissionController;
-use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,3 +26,4 @@ Route::resource('user', UserController::class)->except('create', 'edit');
 Route::resource('category', CategoryController::class)->except('create', 'edit');
 Route::resource('tag', TagController::class)->except('create', 'edit');
 Route::resource('role', RolePermissionController::class)->except('create', 'edit');
+Route::resource('post', PostController::class)->except('create', 'edit')->middleware('auth:sanctum');

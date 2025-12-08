@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use App\Traits\HandleJsonValidation;
-use App\Traits\Traits\HandleUploadFile;
+use App\Traits\HandleUploadFile;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
