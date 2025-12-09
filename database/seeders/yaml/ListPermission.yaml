@@ -1,0 +1,25 @@
+permissions:
+  - name: View:User
+  - name: Create:User
+  - name: Edit:User
+  - name: Delete:User
+
+  - name: View:Category
+  - name: Create:Category
+  - name: Edit:Category
+  - name: Delete:Category
+
+  - name: View:Tag
+  - name: Create:Tag
+  - name: Edit:Tag
+  - name: Delete:Tag
+
+  - name: View:Post
+  - name: Create:Post
+  - name: Edit:Post
+  - name: Delete:Post
+
+  - name: View:RolePermission
+  - name: Create:RolePermission
+  - name: Edit:RolePermission
+  - name: Delete:RolePermission
