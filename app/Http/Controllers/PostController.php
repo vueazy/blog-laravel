@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CommentRequest;
 use App\Http\Resources\CommentResource;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +27,10 @@ class PostController extends Controller
                     ->orWhere('excerpt', 'like', "%{$request->search}%")
                     ->orWhere('content', 'like', "%{$request->search}%");
             })
-            ->paginate(10);
+            ->when(!empty($request->user_id), function ($query) use ($request) {
+                return $query->where('user_id', $request->user_id);
+            })
+            ->paginate($request->per_page ?? 10);
 
         return responseJson(
             message: 'Posts retrieved successfully',
@@ -132,6 +137,25 @@ class PostController extends Controller
         return responseJson(
             message: 'Comments retrieved successfully',
             data: CommentResource::collection($comment)
+        );
+    }
+
+    public function publish(string $id)
+    {
+        if (Auth::user()->hasRole(['admin', 'editor'])) {
+            $post = Post::findOrFail($id);
+            $post->update(['status' => 'published', 'published_at' => now()]);
+
+            return responseJson(
+                message: 'Post successfullly published',
+                data: new PostResource($post),
+            );
+        }
+
+        return responseJson(
+            success: false,
+            errors: 'You are not authorized to publish this post',
+            code: Response::HTTP_UNAUTHORIZED
         );
     }
 }
