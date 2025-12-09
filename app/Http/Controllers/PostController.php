@@ -142,9 +142,14 @@ class PostController extends Controller
 
     public function publish(string $id)
     {
+        $post = Post::findOrFail($id);
+        
         if (Auth::user()->hasRole(['admin', 'editor'])) {
-            $post = Post::findOrFail($id);
-            $post->update(['status' => 'published', 'published_at' => now()]);
+            $post->update([
+                'status' => 'published', 
+                'published_at' => now(),
+                'published_by' => Auth::user()->email
+            ]);
 
             return responseJson(
                 message: 'Post successfullly published',
