@@ -8,6 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\StatisticController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -31,3 +32,5 @@ Route::resource('post', PostController::class)->except('create', 'edit')->middle
 Route::get('/post/{post}/comment', [PostController::class, 'comment'])->name('post.comment')->middleware('auth:sanctum');
 Route::post('/post/{post}/comment', [PostController::class, 'comments'])->name('post.comments')->middleware('auth:sanctum');
 Route::get('/post/{post}/publish', [PostController::class, 'publish'])->name('post.publish')->middleware('auth:sanctum');
+
+Route::get('/statistic', StatisticController::class)->middleware('auth:sanctum');
