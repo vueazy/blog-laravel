@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
+use App\Http\Requests\CommentRequest;
+use App\Http\Resources\CommentResource;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -91,6 +94,44 @@ class PostController extends Controller
         return responseJson(
             message: 'Post deleted successfully',
             data: new PostResource($post)
+        );
+    }
+
+    /**
+     * Send comments to the specific post
+     * 
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function comments(CommentRequest $request, string $id)
+    {
+        $comments = Comment::create($request->validated() + ['post_id' => $id]);
+
+        return responseJson(
+            message: 'Comment added successfully',
+            data: new CommentResource($comments)
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     * 
+     * @param Request $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function comment(Request $request, string $id)
+    {
+        $comment = Comment::query()
+            ->when(!empty($request->search), function ($query) use ($request) {
+                return $query->where('content', 'like', "%{$request->search}%");
+            })
+            ->where('post_id', $id)
+            ->get();
+
+        return responseJson(
+            message: 'Comments retrieved successfully',
+            data: CommentResource::collection($comment)
         );
     }
 }
